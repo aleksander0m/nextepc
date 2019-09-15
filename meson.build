@@ -178,6 +178,12 @@ if have_func_strerror_r
     endif
 endif
 
+# Check for /dev/urandom
+if run_command('[', '-c', '/dev/urandom', ']').returncode() == 0
+    ogs_conf.set_quoted('OGS_DEV_RANDOM', '/dev/urandom',
+                  description: 'a suitable file to read random data from')
+endif
+
 # Check for EPOLL
 if have_func_epoll_ctl
     ogs_conf.set('HAVE_EPOLL', 1,
