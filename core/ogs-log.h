@@ -50,7 +50,7 @@ extern "C" {
     1, __VA_ARGS__) 
 
 #define ogs_log_hexdump(level, _d, _l) \
-    ogs_log_hexdump_func(level, OGS_LOG_DOMAIN, (void*)_d, _l)
+    ogs_log_hexdump_func(level, OGS_LOG_DOMAIN, _d, _l)
 
 typedef enum {
     OGS_LOG_NONE,

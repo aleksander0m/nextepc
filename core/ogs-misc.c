@@ -24,12 +24,12 @@
 /* Remove trailing separators that don't affect the meaning of PATH. */
 static void path_canonicalize(char *dir)
 {
-    ogs_assert(dir);
-
     /* At some point this could eliminate redundant components.  For
      * now, it just makes sure there is no trailing slash. */
     size_t len = strlen (dir);
     size_t orig_len = len;
+
+    ogs_assert(dir);
 
     while ((len > 0) && (dir[len - 1] == PATH_SEPARATOR))
         len--;

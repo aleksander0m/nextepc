@@ -29,7 +29,7 @@ extern "C" {
 #endif
 
 typedef struct ogs_cluster_s {
-    void *buffer;
+    unsigned char *buffer;
     unsigned int size;
 
     unsigned int ref;
@@ -41,10 +41,10 @@ typedef struct ogs_pkbuf_s {
 
     unsigned int len;
 
-    void *head;
-    void *tail;
-    void *data;
-    void *end;
+    unsigned char *head;
+    unsigned char *tail;
+    unsigned char *data;
+    unsigned char *end;
     
     ogs_pkbuf_pool_t *pool;
 } ogs_pkbuf_t;

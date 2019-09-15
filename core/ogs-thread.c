@@ -105,8 +105,8 @@ ogs_thread_t *ogs_thread_create(void (*func)(void *), void *data)
 
 void ogs_thread_destroy(ogs_thread_t *thread)
 {
-    ogs_assert(thread);
     const ogs_time_t deadline = ogs_get_monotonic_time() + 5 * 1000 * 1000;
+    ogs_assert(thread);
 
     ogs_debug("[%p] thread running(%d)", thread, thread->running);
     while(ogs_get_monotonic_time() <= deadline) {

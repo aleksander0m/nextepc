@@ -50,8 +50,8 @@ typedef struct ogs_tlv_s
     /* can be needed in encoding ogs_tlv_t*/
     bool buff_allocated;
     uint32_t buff_len;
-    void *buff_ptr;
-    void *buff;
+    unsigned char *buff_ptr;
+    unsigned char *buff;
 } ogs_tlv_t;
 
 #define ogs_tlv_type(pTlv) pTlv->type

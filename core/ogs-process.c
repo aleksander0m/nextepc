@@ -42,7 +42,6 @@
 int ogs_proc_create(const char *const commandLine[], int options,
                     ogs_proc_t *const out_process)
 {
-    ogs_assert(out_process);
 #if defined(_WIN32)
     struct process_process_information_s {
         void *hProcess;
@@ -90,6 +89,8 @@ int ogs_proc_create(const char *const commandLine[], int options,
     char *environment = 0;
     ogs_proc_ttartup_info_s startInfo = { 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                                 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+    ogs_assert(out_process);
 
     startInfo.cb = sizeof(startInfo);
     startInfo.dwFlags = startFUseStdHandles;
@@ -223,6 +224,8 @@ int ogs_proc_create(const char *const commandLine[], int options,
     int stderrfd[2];
     pid_t child;
 
+    ogs_assert(out_process);
+
     if (0 != pipe(stdinfd)) {
         return OGS_ERROR;
     }
@@ -325,11 +328,11 @@ FILE *ogs_proc_stderr(const ogs_proc_t *const process)
 
 int ogs_proc_join(ogs_proc_t *const process, int *const out_return_code)
 {
-    ogs_assert(process);
-    ogs_assert(out_return_code);
 #if defined(_WIN32)
     const unsigned long infinite = 0xFFFFFFFF;
 
+    ogs_assert(process);
+    ogs_assert(out_return_code);
     if (0 != process->stdin_file) {
         fclose(process->stdin_file);
         process->stdin_file = 0;
@@ -348,6 +351,8 @@ int ogs_proc_join(ogs_proc_t *const process, int *const out_return_code)
 #else
     int status;
 
+    ogs_assert(process);
+    ogs_assert(out_return_code);
     if (0 != process->stdin_file) {
         fclose(process->stdin_file);
         process->stdin_file = 0;

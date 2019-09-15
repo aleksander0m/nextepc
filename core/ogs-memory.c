@@ -47,7 +47,7 @@ void ogs_free(void *ptr)
         return;
 
     headroom = sizeof(ogs_pkbuf_t *);
-    memcpy(&pkbuf, ptr - headroom, headroom);
+    memcpy(&pkbuf, (unsigned char*)ptr - headroom, headroom);
     ogs_assert(pkbuf);
 
     ogs_pkbuf_free(pkbuf);
@@ -75,7 +75,7 @@ void *ogs_realloc(void *ptr, size_t size)
 
     headroom = sizeof(ogs_pkbuf_t *);
 
-    memcpy(&pkbuf, ptr - headroom, headroom);
+    memcpy(&pkbuf, (unsigned char*)ptr - headroom, headroom);
     ogs_assert(pkbuf);
     cluster = pkbuf->cluster;
     ogs_assert(cluster);

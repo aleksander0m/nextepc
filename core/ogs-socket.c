@@ -307,10 +307,10 @@ int ogs_closesocket(ogs_socket_t fd)
 
 int ogs_nonblocking(ogs_socket_t fd)
 {
+#ifdef _WIN32
     int rc;
     ogs_assert(fd != INVALID_SOCKET);
 
-#ifdef _WIN32
     u_long io_mode = 1;
     rc = ioctlsocket(fd, FIONBIO, &io_mode);
     if (rc != OGS_OK) {
@@ -318,7 +318,9 @@ int ogs_nonblocking(ogs_socket_t fd)
         return OGS_ERROR;
     }
 #else
+    int rc;
     int flags;
+    ogs_assert(fd != INVALID_SOCKET);
 
     flags = fcntl(fd, F_GETFL, NULL);
     if (flags < 0) {
@@ -341,9 +343,9 @@ int ogs_closeonexec(ogs_socket_t fd)
 {
 #ifndef _WIN32
     int rc;
-    ogs_assert(fd != INVALID_SOCKET);
     int flags;
 
+    ogs_assert(fd != INVALID_SOCKET);
     flags = fcntl(fd, F_GETFL, NULL);
     if (flags < 0) {
         ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno, "F_GETFL failed");
@@ -365,9 +367,9 @@ int ogs_listen_reusable(ogs_socket_t fd)
 {
 #if defined(SO_REUSEADDR) && !defined(_WIN32)
     int rc;
-    ogs_assert(fd != INVALID_SOCKET);
     int on = 1;
 
+    ogs_assert(fd != INVALID_SOCKET);
     rc = setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (void *)&on, sizeof(int));
     if (rc != OGS_OK) {
         ogs_log_message(OGS_LOG_ERROR, ogs_socket_errno,

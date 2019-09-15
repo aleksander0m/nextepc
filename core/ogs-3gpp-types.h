@@ -314,8 +314,8 @@ ED3(uint8_t ext:1;,
     ogs_pco_id_t ids[OGS_MAX_NUM_OF_PROTOCOL_OR_CONTAINER_ID];
 } ogs_pco_t;
 
-int ogs_pco_parse(ogs_pco_t *pco, void *data, int data_len);
-int ogs_pco_build(void *data, int data_len, ogs_pco_t *pco);
+int ogs_pco_parse(ogs_pco_t *pco, unsigned char *data, int data_len);
+int ogs_pco_build(unsigned char *data, int data_len, ogs_pco_t *pco);
 
 #ifdef __cplusplus
 }

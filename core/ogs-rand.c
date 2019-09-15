@@ -128,6 +128,6 @@ static void evutil_memclear_(void *mem, size_t len)
 	evutil_memset_volatile_(mem, 0, len);
 }
 
-#include "../contrib/arc4random.c"
+#include "arc4random.c"
 #endif
 
