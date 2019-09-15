@@ -81,7 +81,7 @@ void ogs_random(void *buf, size_t buflen)
             fd = -1; /* force open() again */
         }
         else {
-            buf += rc;
+			buf = (unsigned char *)buf + rc;
             buflen -= rc;
         }
     } while (buflen > 0);
