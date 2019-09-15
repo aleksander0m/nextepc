@@ -243,7 +243,7 @@ void ClockLFSRInitializationMode(u32 F)
 * See section 3.4.5.
 */
 
-void ClockLFSRKeyStreamMode()
+void ClockLFSRKeyStreamMode(void)
 {
 	u32 v = ( ( (LFSR_S0 << 8) & 0xffffff00 ) ^
 		( MULalpha( (u8)((LFSR_S0>>24) & 0xff) ) ) ^
@@ -275,7 +275,7 @@ void ClockLFSRKeyStreamMode()
 * See Section 3.4.6.
 */
 
-u32 ClockFSM()
+u32 ClockFSM(void)
 {
 	u32 F = ( ( LFSR_S15 + FSM_R1 ) & 0xffffffff ) ^ FSM_R2 ;
 	u32 r = ( FSM_R2 + ( FSM_R3 ^ LFSR_S5 ) ) & 0xffffffff ;

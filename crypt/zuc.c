@@ -128,7 +128,7 @@ void LFSRWithInitialisationMode(u32 u)
 }
 
 /* LFSR with work mode */
-void LFSRWithWorkMode()
+void LFSRWithWorkMode(void)
 {
 	u32 f, v;
 	f = LFSR_S0;
@@ -164,7 +164,7 @@ void LFSRWithWorkMode()
 }
 
 /* BitReorganization */
-void BitReorganization()
+void BitReorganization(void)
 {
 	BRC_X0 = ((LFSR_S15 & 0x7FFF8000) << 1) | (LFSR_S14 & 0xFFFF);
 	BRC_X1 = ((LFSR_S11 & 0xFFFF) << 16) | (LFSR_S9 >> 15);
@@ -188,7 +188,7 @@ u32 L2(u32 X)
 
 #define MAKEU32(a, b, c, d) (((u32)(a) << 24) | ((u32)(b) << 16) | ((u32)(c) << 8) | ((u32)(d)))
 /* F */
-u32 F()
+u32 F(void)
 {
 	u32 W, W1, W2, u, v;
 	
