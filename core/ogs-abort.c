@@ -29,7 +29,7 @@
 
 void ogs_abort(void)
 {
-#if HAVE_EXECINFO_H
+#if HAVE_BACKTRACE
     int nptrs;
     void *buffer[100];
 

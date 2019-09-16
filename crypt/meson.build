@@ -4,13 +4,13 @@ ogs_headers = files(
 install_headers(ogs_headers, subdir : 'open5gs')
 
 ogs_sub_headers = files(
-	'ogs-aes.h',
+    'ogs-aes.h',
     'ogs-aes-cmac.h',
-	'ogs-sha1.h',
+    'ogs-sha1.h',
     'ogs-sha1-hmac.h',
-	'ogs-sha2.h',
+    'ogs-sha2.h',
     'ogs-sha2-hmac.h',
-	'milenage.h',
+    'milenage.h',
     'snow-3g.h',
     'zuc.h',
     'kasumi.h',
@@ -18,13 +18,13 @@ ogs_sub_headers = files(
 install_headers(ogs_sub_headers, subdir : 'open5gs/crypt')
 
 ogs_sources = files(
-	'ogs-aes.c',
+    'ogs-aes.c',
     'ogs-aes-cmac.c',
-	'ogs-sha1.c',
+    'ogs-sha1.c',
     'ogs-sha1-hmac.c',
-	'ogs-sha2.c',
+    'ogs-sha2.c',
     'ogs-sha2-hmac.c',
-	'milenage.c',
+    'milenage.c',
     'snow-3g.c',
     'zuc.c',
     'kasumi.c',
@@ -38,7 +38,7 @@ libogscrypt = library('ogscrypt',
     darwin_versions : darwin_versions,
     install : true,
     include_directories : configinc,
-    dependencies : [thread_dep, network_libs, librt, libogscore_dep],
+    dependencies : libogscore_dep,
     c_args : ogs_c_args,
     objc_args : ogs_c_args,
 )

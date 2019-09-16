@@ -106,6 +106,12 @@ foreach h : headers
     endif
 endforeach
 
+# Check sys_syslist
+if cc.has_header_symbol('signal.h', 'sys_siglist')
+    ogs_conf.set('HAVE_DECL_SYS_SIGLIST', 1,
+                  description: 'Define to 1 if you have the declaration of \`sys_siglist\', and to 0 if you don\'t.')
+endif
+
 # Compiler flags
 if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     warning_c_args = [
@@ -178,29 +184,21 @@ if have_func_strerror_r
     endif
 endif
 
-# Check for /dev/urandom
-if run_command('[', '-c', '/dev/urandom', ']').returncode() == 0
-    ogs_conf.set_quoted('OGS_DEV_RANDOM', '/dev/urandom',
-                  description: 'a suitable file to read random data from')
-endif
+# Check for backtrace()
+libexecinfo = []
+if ogs_conf.has('HAVE_EXECINFO_H')
+    if cc.has_function('backtrace', prefix : '#include <execinfo.h>')
+        ogs_conf.set('HAVE_BACKTRACE', 1)
+    else
+        execinfo_dep = cc.find_library('execinfo', required : false)
+        if libexecinfo.found() and cc.has_function('backtrace', prefix : '#include <execinfo.h>', dependencies : execinfo_dep)
+            ogs_conf.set('HAVE_BACKTRACE', 1)
+            libexecinfo += execinfo_dep
+        endif
+    endif
+endif    
 
-# Check for EPOLL
-if have_func_epoll_ctl
-    ogs_conf.set('HAVE_EPOLL', 1,
-                  description: 'Defined if your system supports the epoll system calls')
-endif
-
-# Check for eventfd(2)
-if cc.links('''#include <sys/eventfd.h>
-               #include <unistd.h>
-               int main (int argc, char ** argv) {
-                   eventfd (0, EFD_CLOEXEC);
-                   return 0;
-               }''', name : 'eventfd(2) system call')
-    ogs_conf.set('HAVE_EVENTFD', 1)
-endif
-
-# Check for clock_gettime
+# Check for clock_gettime()
 clock_gettime_test_code = '''
     #include <time.h>
     struct timespec t;
@@ -215,9 +213,31 @@ elif cc.links(clock_gettime_test_code, args : '-lrt', name : 'clock_gettime in l
     librt = cc.find_library('rt')
 endif
 
+# Check for /dev/urandom
+if run_command('[', '-c', '/dev/urandom', ']').returncode() == 0
+    ogs_conf.set_quoted('OGS_DEV_RANDOM', '/dev/urandom',
+                  description: 'a suitable file to read random data from')
+endif
+
+# Check for eventfd()
+if cc.links('''#include <sys/eventfd.h>
+               #include <unistd.h>
+               int main (int argc, char ** argv) {
+                   eventfd (0, EFD_CLOEXEC);
+                   return 0;
+               }''', name : 'eventfd(2) system call')
+    ogs_conf.set('HAVE_EVENTFD', 1)
+endif
+
+# Check for epoll
+if have_func_epoll_ctl
+    ogs_conf.set('HAVE_EPOLL', 1,
+                  description: 'Defined if your system supports the epoll system calls')
+endif
+
 # Check for network socket
-network_libs = [ ]
-network_args = [ ]
+network_libs = []
+network_args = []
 if host_system != 'windows'
     # socket()
     socket_test = '''#include <sys/types.h>
