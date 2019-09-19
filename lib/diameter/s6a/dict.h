@@ -104,6 +104,8 @@ extern struct dict_object *ogs_diam_s6a_priority_level;
 extern struct dict_object *ogs_diam_s6a_pre_emption_capability;
 extern struct dict_object *ogs_diam_s6a_pre_emption_vulnerability;
 
+extern struct dict_object *ogs_diam_s6a_supported_features;
+
 int ogs_diam_s6a_dict_init(void);
 
 #ifdef __cplusplus

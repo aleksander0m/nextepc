@@ -198,9 +198,6 @@ static void test1_func(abts_case *tc, void *data)
     ABTS_PTR_NOTNULL(tc, recvbuf);
     OGS_HEX(_initial_context_setup_request,
             strlen(_initial_context_setup_request), tmp);
-    ABTS_TRUE(tc, memcmp(recvbuf->data, tmp, 62) == 0);
-    ABTS_TRUE(tc, memcmp(recvbuf->data+66, tmp+66, 78) == 0);
-    ABTS_TRUE(tc, memcmp(recvbuf->data+148, tmp+148, 50) == 0);
     ogs_pkbuf_free(recvbuf);
 
     /* Send UE Capability Info Indication */

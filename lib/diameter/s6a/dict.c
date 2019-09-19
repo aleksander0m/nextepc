@@ -67,6 +67,8 @@ struct dict_object *ogs_diam_s6a_priority_level = NULL;
 struct dict_object *ogs_diam_s6a_pre_emption_capability = NULL;
 struct dict_object *ogs_diam_s6a_pre_emption_vulnerability = NULL;
 
+struct dict_object *ogs_diam_s6a_supported_features = NULL;
+
 int ogs_diam_s6a_dict_init(void)
 {
     application_id_t id = OGS_DIAM_S6A_APPLICATION_ID;
@@ -120,6 +122,9 @@ int ogs_diam_s6a_dict_init(void)
     CHECK_dict_search(DICT_AVP, AVP_BY_NAME_ALL_VENDORS, "Network-Access-Mode", &ogs_diam_s6a_network_access_mode);
     CHECK_dict_search(DICT_AVP, AVP_BY_NAME_ALL_VENDORS, "Access-Restriction-Data", &ogs_diam_s6a_access_restriction_data);
     CHECK_dict_search(DICT_AVP, AVP_BY_NAME_ALL_VENDORS, "Subscribed-Periodic-RAU-TAU-Timer", &ogs_diam_s6a_subscribed_rau_tau_timer);
+
+    CHECK_dict_search(DICT_AVP, AVP_BY_NAME_ALL_VENDORS,
+            "Supported-Features", &ogs_diam_s6a_supported_features);
 
 	return 0;
 }

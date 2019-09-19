@@ -39,6 +39,37 @@ static int hss_ogs_diam_s6a_fb_cb(struct msg **msg, struct avp *avp,
 	return ENOTSUP;
 }
 
+int ogs_diam_message_supported_features(struct msg *msg, uint32_t app_id)
+{
+    struct avp *avp;
+    struct avp *avp_vendor;
+    struct avp *avp_vendor_specific_application_id;
+    union avp_value value;
+
+    CHECK_FCT( fd_msg_avp_new(ogs_diam_s6a_supported_features, 0, &avp) );
+
+    CHECK_FCT( fd_msg_avp_new(ogs_diam_vendor_id, 0, &avp_vendor) );
+#if 0
+    value.u32 = OGS_3GPP_VENDOR_ID;
+#else
+    value.u32 = 10415;
+#endif
+    CHECK_FCT( fd_msg_avp_setvalue(avp_vendor, &value) );
+    CHECK_FCT( fd_msg_avp_add(avp, MSG_BRW_LAST_CHILD, avp_vendor) );
+
+    CHECK_FCT( fd_msg_avp_new(
+            ogs_diam_auth_application_id, 0, &avp_vendor_specific_application_id) );
+    value.u32 = app_id;
+    CHECK_FCT(
+            fd_msg_avp_setvalue(avp_vendor_specific_application_id, &value) );
+    CHECK_FCT( fd_msg_avp_add(avp, MSG_BRW_LAST_CHILD, 
+                avp_vendor_specific_application_id) );
+
+    CHECK_FCT( fd_msg_avp_add(msg, MSG_BRW_LAST_CHILD, avp) );
+
+    return 0;
+}
+
 /* Callback for incoming Authentication-Information-Request messages */
 static int hss_ogs_diam_s6a_air_cb( struct msg **msg, struct avp *avp, 
         struct session *session, void *opaque, enum disp_action *act)
@@ -341,7 +372,6 @@ static int hss_ogs_diam_s6a_ulr_cb( struct msg **msg, struct avp *avp,
         struct avp *avp_access_restriction_data;
         struct avp *avp_subscriber_status, *avp_network_access_mode;
         struct avp *avp_ambr, *avp_max_bandwidth_ul, *avp_max_bandwidth_dl;
-        struct avp *avp_rau_tau_timer;
         int i;
 
         /* Set the Subscription Data */
@@ -397,16 +427,6 @@ static int hss_ogs_diam_s6a_ulr_cb( struct msg **msg, struct avp *avp,
                 avp_ambr, MSG_BRW_LAST_CHILD, avp_max_bandwidth_dl);
         ogs_assert(ret == 0);
         ret = fd_msg_avp_add(avp, MSG_BRW_LAST_CHILD, avp_ambr);
-        ogs_assert(ret == 0);
-
-        /* Set the Subscribed RAU TAU Timer */
-        ret = fd_msg_avp_new(
-                ogs_diam_s6a_subscribed_rau_tau_timer, 0, &avp_rau_tau_timer);
-        ogs_assert(ret == 0);
-        val.i32 = subscription_data.subscribed_rau_tau_timer * 60; /* seconds */
-        ret = fd_msg_avp_setvalue(avp_rau_tau_timer, &val);
-        ogs_assert(ret == 0);
-        ret = fd_msg_avp_add(avp, MSG_BRW_LAST_CHILD, avp_rau_tau_timer);
         ogs_assert(ret == 0);
 
         if (subscription_data.num_of_pdn) {
@@ -589,34 +609,6 @@ static int hss_ogs_diam_s6a_ulr_cb( struct msg **msg, struct avp *avp,
                     ogs_assert(ret == 0);
                 }
 
-                /* Set AMBR */
-                if (pdn->ambr.downlink || pdn->ambr.uplink) {
-                    ret = fd_msg_avp_new(ogs_diam_s6a_ambr, 0, &avp_ambr);
-                    ogs_assert(ret == 0);
-                    ret = fd_msg_avp_new(ogs_diam_s6a_max_bandwidth_ul, 0, 
-                                &avp_max_bandwidth_ul);
-                    ogs_assert(ret == 0);
-                    val.u32 = pdn->ambr.uplink;
-                    ret = fd_msg_avp_setvalue(avp_max_bandwidth_ul, &val);
-                    ogs_assert(ret == 0);
-                    ret = fd_msg_avp_add(avp_ambr, MSG_BRW_LAST_CHILD, 
-                                avp_max_bandwidth_ul);
-                    ogs_assert(ret == 0);
-                    ret = fd_msg_avp_new(ogs_diam_s6a_max_bandwidth_dl, 0, 
-                                &avp_max_bandwidth_dl);
-                    ogs_assert(ret == 0);
-                    val.u32 = pdn->ambr.downlink;
-                    ret = fd_msg_avp_setvalue(avp_max_bandwidth_dl, &val);
-                    ogs_assert(ret == 0);
-                    ret = fd_msg_avp_add(avp_ambr, MSG_BRW_LAST_CHILD, 
-                                avp_max_bandwidth_dl);
-                    ogs_assert(ret == 0);
-
-                    ret = fd_msg_avp_add(apn_configuration, 
-                            MSG_BRW_LAST_CHILD, avp_ambr);
-                    ogs_assert(ret == 0);
-                }
-
                 ret = fd_msg_avp_add(apn_configuration_profile, 
                         MSG_BRW_LAST_CHILD, apn_configuration);
                 ogs_assert(ret == 0);
@@ -630,8 +622,31 @@ static int hss_ogs_diam_s6a_ulr_cb( struct msg **msg, struct avp *avp,
         ogs_assert(ret == 0);
     }
 
+    /* Set the Subscribed RAU TAU Timer */
+    ret = fd_msg_avp_new(
+            ogs_diam_s6a_subscribed_rau_tau_timer, 0, &avp);
+    ogs_assert(ret == 0);
+    val.i32 = subscription_data.subscribed_rau_tau_timer * 60; /* seconds */
+    ret = fd_msg_avp_setvalue(avp, &val);
+    ogs_assert(ret == 0);
+    ret = fd_msg_avp_add(ans, MSG_BRW_LAST_CHILD, avp);
+    ogs_assert(ret == 0);
+
     /* Set Vendor-Specific-Application-Id AVP */
     ret = ogs_diam_message_vendor_specific_appid_set(ans, OGS_DIAM_S6A_APPLICATION_ID);
+    ogs_assert(ret == 0);
+
+    ret = ogs_diam_message_supported_features(ans, OGS_DIAM_S6A_APPLICATION_ID);
+    ogs_assert(ret == 0);
+
+    /* Set the Subscribed RAU TAU Timer */
+    ret = fd_msg_avp_new(
+            ogs_diam_s6a_subscribed_rau_tau_timer, 0, &avp);
+    ogs_assert(ret == 0);
+    val.i32 = subscription_data.subscribed_rau_tau_timer * 60; /* seconds */
+    ret = fd_msg_avp_setvalue(avp, &val);
+    ogs_assert(ret == 0);
+    ret = fd_msg_avp_add(ans, MSG_BRW_LAST_CHILD, avp);
     ogs_assert(ret == 0);
 
 	/* Send the answer */

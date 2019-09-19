@@ -71,6 +71,7 @@ int ogs_diam_message_session_id_set(struct msg *msg, uint8_t *sid, size_t sidlen
 int ogs_diam_message_experimental_rescode_set(
         struct msg *msg, uint32_t result_code);
 int ogs_diam_message_vendor_specific_appid_set(struct msg *msg, uint32_t app_id);
+int ogs_diam_message_supported_feature(struct msg *msg, uint32_t app_id);
 
 #ifdef __cplusplus
 }

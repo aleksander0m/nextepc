@@ -147,3 +147,4 @@ int ogs_diam_message_vendor_specific_appid_set(struct msg *msg, uint32_t app_id)
 
     return 0;
 }
+
