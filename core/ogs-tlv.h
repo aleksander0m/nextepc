@@ -45,7 +45,7 @@ typedef struct ogs_tlv_s
     uint32_t type;
     uint32_t length;
     uint8_t instance;
-    void *value;
+    unsigned char *value;
 
     /* can be needed in encoding ogs_tlv_t*/
     bool buff_allocated;

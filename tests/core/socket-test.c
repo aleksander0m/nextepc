@@ -122,10 +122,7 @@ static void test3_main(void *data)
     int rv;
     ogs_sock_t *udp;
     ogs_sockaddr_t *addr;
-    ogs_socknode_t *node;
-    char str[STRLEN];
     ssize_t size;
-    char buf[OGS_ADDRSTRLEN];
 
     rv = ogs_getaddrinfo(&addr, AF_INET, NULL, PORT, 0);
     ABTS_INT_EQUAL(tc, OGS_OK, rv);
@@ -150,7 +147,6 @@ static void test3_func(abts_case *tc, void *data)
     ogs_sockaddr_t sa;
     ogs_sockaddr_t *addr;
     ogs_socknode_t *node;
-    socklen_t addrlen;
     char str[STRLEN];
     char buf[OGS_ADDRSTRLEN];
 
@@ -208,7 +204,6 @@ static void test4_func(abts_case *tc, void *data)
     ogs_sockaddr_t sa;
     ogs_sockaddr_t *addr;
     ogs_socknode_t *node;
-    socklen_t addrlen;
     char str[STRLEN];
     char buf[OGS_ADDRSTRLEN];
 
@@ -275,7 +270,6 @@ static void test5_func(abts_case *tc, void *data)
     ssize_t size;
     ogs_sockaddr_t sa, *addr;
     ogs_socknode_t *node;
-    socklen_t addrlen;
     char str[STRLEN];
     char buf[OGS_ADDRSTRLEN];
 

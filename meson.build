@@ -122,7 +122,6 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
         '-Wstrict-prototypes',
         '-Wno-typedef-redefinition',
         '-Wunused',
-        '-Werror=declaration-after-statement',
         '-Werror=format=1',
         '-Werror=implicit-function-declaration',
         '-Werror=init-self',
@@ -275,7 +274,7 @@ subdir('crypt')
 # Don’t build the tests unless we can run them (either natively or in an exe wrapper)
 build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper())
 if build_tests
-#  subdir('tests')
+  subdir('tests')
 endif
 
 configure_file(output : 'config.h', configuration : ogs_conf)

@@ -56,7 +56,6 @@ static void test1_func(abts_case *tc, void *data)
     ogs_pollset_t *pollset = NULL;
     ogs_timer_mgr_t *timer = NULL;
     ogs_timer_t *timer_array[TEST_TIMER_NUM];
-    ogs_timer_t *node;
 
     memset(expire_check, 0, TEST_DURATION/TEST_TIMER_PRECISION);
 

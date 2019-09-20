@@ -179,7 +179,7 @@ static OGS_POOL(testpool, testnode_t);
 static void test3_func(abts_case *tc, void *data)
 {
     ogs_pool_init(&testpool, 5);
-    testnode_t *node[7] = {NULL};
+    testnode_t *node[7] = {NULL, };
     int index;
 
     ogs_pool_alloc(&testpool, &node[0]);
