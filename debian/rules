@@ -12,7 +12,6 @@ VERSION := $(shell echo '$(DEBVERS)' | sed -e 's/[+-].*//' -e 's/~//g')
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
-<<<<<<< HEAD
 	dh $@ --with autoreconf --with systemd
 
 override_dh_strip:
@@ -24,16 +23,6 @@ override_dh_auto_test:
 		sctp_exclude_list="-x sctp-test"; \
 	fi; \
 	tests/testunit $$sctp_exclude_list || exit; \
-=======
-	dh $@ --with autoreconf
-
-override_dh_strip:
-	dh_strip --dbg-package=libogslib-dbg
-
-#override_dh_auto_test:
-#	tests/core/testcore -dthread -x sctp-test || exit;
-#	tests/crypt/testcrypt || exit;
->>>>>>> ogslib/meson
 
 #override_dh_makeshlibs:
 #	dh_makeshlibs -V
