@@ -11,29 +11,8 @@ project('open5gs', 'c',
     meson_version : '>= 0.46',
 )
 
-cc = meson.get_compiler('c')
-
-host_system = host_machine.system()
-
-ogs_version = meson.project_version()
-version_arr = ogs_version.split('.')
-major_version = version_arr[0].to_int()
-minor_version = version_arr[1].to_int()
-micro_version = version_arr[2].to_int()
-
-interface_age = minor_version.is_odd() ? 0 : micro_version
-binary_age = 100 * minor_version + micro_version
-
-soversion = 0
-# Maintain compatibility with previous libtool versioning
-# current = minor * 100 + micro
-current = binary_age - interface_age
-library_version = '@0@.@1@.@2@'.format(soversion, current, interface_age)
-darwin_versions = [current + 1, '@0@.@1@'.format(current + 1, interface_age)]
-
-configinc = include_directories('.')
-coreinc = include_directories('core')
-cryptinc = include_directories('crypt')
+conf = configuration_data()
+conf.set('PROJECT_VERSION',        meson.project_version())
 
 # join_paths ignores the preceding arguments if an absolute component is
 # encountered, so this should canonicalize various paths when they are
@@ -52,12 +31,19 @@ localstatedir = join_paths('/', get_option('localstatedir'))
 pkgconfigdatadir = get_option('pkgconfigdatadir') == '' ? join_paths(datadir, 'pkgconfig') : get_option('pkgconfigdatadir')
 pkgconfiglibdir = get_option('pkgconfiglibdir') == '' ? join_paths(libdir, 'pkgconfig') : get_option('pkgconfiglibdir')
 
+configinc = include_directories('.')
+coreinc = include_directories('core')
+cryptinc = include_directories('crypt')
+
+
+#####################################################################
+
+cc = meson.get_compiler('c')
+pkgconfig = import('pkgconfig')
+
+host_system = host_machine.system()
+
 add_project_arguments('-D_GNU_SOURCE', language: 'c')
-
-conf = configuration_data()
-
-conf.set('PROJECT_VERSION',        meson.project_version())
-conf.set('_GNU_SOURCE', 1)
 
 headers = [
     'arpa/inet.h',
@@ -263,16 +249,15 @@ if host_system != 'windows'
     endif
 endif
 
-thread_dep = dependency('threads')
+thread = dependency('threads')
 
-pkg = import('pkgconfig')
-
-subdir('core')
-subdir('crypt')
+subdir('src')
 # Don’t build the tests unless we can run them (either natively or in an exe wrapper)
 build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper())
 if build_tests
   subdir('tests')
 endif
 
-configure_file(output : 'config.h', configuration : conf)
+config_h = configure_file(
+        output : 'config.h',
+        configuration : conf)
