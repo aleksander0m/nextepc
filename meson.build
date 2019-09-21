@@ -1,11 +1,14 @@
-project('ogslib', 'c',
-    version : '2.0.0',
-    # NOTE: We keep this pinned at 0.49 because that's what Debian 10 ships
-    meson_version : '>= 0.49.2',
+project('open5gs', 'c',
+    version : '200',
+    license : 'AGPL-3.0-or-later'
     default_options : [
         'warning_level=1',
-        'c_std=gnu89'
+        'c_std=gnu89',
+        'prefix=/usr',
+        'sysconfdir=/etc',
+        'localstatedir=/var',
     ]
+    meson_version : '>= 0.46',
 )
 
 cc = meson.get_compiler('c')
@@ -32,34 +35,29 @@ configinc = include_directories('.')
 coreinc = include_directories('core')
 cryptinc = include_directories('crypt')
 
-ogs_prefix = get_option('prefix')
-ogs_bindir = join_paths(ogs_prefix, get_option('bindir'))
-ogs_libdir = join_paths(ogs_prefix, get_option('libdir'))
-ogs_libexecdir = join_paths(ogs_prefix, get_option('libexecdir'))
-ogs_datadir = join_paths(ogs_prefix, get_option('datadir'))
-ogs_pkgdatadir = join_paths(ogs_datadir, 'open5gs')
-ogs_includedir = join_paths(ogs_prefix, get_option('includedir'))
+# join_paths ignores the preceding arguments if an absolute component is
+# encountered, so this should canonicalize various paths when they are
+# absolute or relative.
+prefix = get_option('prefix')
+if not prefixdir.startswith('/')
+        error('Prefix is not absolute: "@0@"'.format(prefixdir))
+endif
+bindir = join_paths(prefix, get_option('bindir'))
+libdir = join_paths(prefix, get_option('libdir'))
+sysconfdir = join_paths(prefixdir, get_option('sysconfdir'))
+includedir = join_paths(prefixdir, get_option('includedir'))
+datadir = join_paths(prefixdir, get_option('datadir'))
+localstatedir = join_paths('/', get_option('localstatedir'))
 
-ogs_pkgconfigreldir = join_paths(ogs_libdir, 'pkgconfig')
+pkgconfigdatadir = get_option('pkgconfigdatadir') == '' ? join_paths(datadir, 'pkgconfig') : get_option('pkgconfigdatadir')
+pkgconfiglibdir = get_option('pkgconfiglibdir') == '' ? join_paths(libdir, 'pkgconfig') : get_option('pkgconfiglibdir')
 
 add_project_arguments('-D_GNU_SOURCE', language: 'c')
 
-ogs_conf = configuration_data()
+conf = configuration_data()
 
-ogs_conf.set('OGSCORE_MAJOR_VERSION', major_version)
-ogs_conf.set('OGSCORE_MINOR_VERSION', minor_version)
-ogs_conf.set('OGSCORE_MICRO_VERSION', micro_version)
-ogs_conf.set('OGSCORE_INTERFACE_AGE', interface_age)
-ogs_conf.set('OGSCORE_BINARY_AGE', binary_age)
-ogs_conf.set_quoted('GETTEXT_PACKAGE', 'libogscore')
-ogs_conf.set_quoted('PACKAGE_BUGREPORT', 'acetcom@gmail.com')
-ogs_conf.set_quoted('PACKAGE_NAME', 'libogscore')
-ogs_conf.set_quoted('PACKAGE_STRING', 'libogscore @0@'.format(meson.project_version()))
-ogs_conf.set_quoted('PACKAGE_TARNAME', 'libogscore')
-ogs_conf.set_quoted('PACKAGE_URL', '')
-ogs_conf.set_quoted('PACKAGE_VERSION', meson.project_version())
-
-ogs_conf.set('_GNU_SOURCE', 1)
+conf.set('PROJECT_VERSION',        meson.project_version())
+conf.set('_GNU_SOURCE', 1)
 
 headers = [
     'arpa/inet.h',
@@ -102,13 +100,13 @@ headers = [
 foreach h : headers
     if cc.has_header(h)
         define = 'HAVE_' + h.underscorify().to_upper()
-        ogs_conf.set(define, 1)
+        conf.set(define, 1)
     endif
 endforeach
 
 # Check sys_syslist
 if cc.has_header_symbol('signal.h', 'sys_siglist')
-    ogs_conf.set('HAVE_DECL_SYS_SIGLIST', 1,
+    conf.set('HAVE_DECL_SYS_SIGLIST', 1,
                   description: 'Define to 1 if you have the declaration of \`sys_siglist\', and to 0 if you don\'t.')
 endif
 
@@ -159,7 +157,7 @@ functions = [
 foreach f : functions
     if cc.has_function(f)
         define = 'HAVE_' + f.underscorify().to_upper()
-        ogs_conf.set(define, 1)
+        conf.set(define, 1)
         set_variable('have_func_' + f, true)
     else
         set_variable('have_func_' + f, false)
@@ -178,20 +176,20 @@ if have_func_strerror_r
                       }
                    ''',
                    name : 'strerror_r() returns char *')
-        ogs_conf.set('STRERROR_R_CHAR_P', 1,
+        conf.set('STRERROR_R_CHAR_P', 1,
                       description: 'Defined if strerror_r returns char *')
     endif
 endif
 
 # Check for backtrace()
 libexecinfo = []
-if ogs_conf.has('HAVE_EXECINFO_H')
+if conf.has('HAVE_EXECINFO_H')
     if cc.has_function('backtrace', prefix : '#include <execinfo.h>')
-        ogs_conf.set('HAVE_BACKTRACE', 1)
+        conf.set('HAVE_BACKTRACE', 1)
     else
         execinfo_dep = cc.find_library('execinfo', required : false)
         if libexecinfo.found() and cc.has_function('backtrace', prefix : '#include <execinfo.h>', dependencies : execinfo_dep)
-            ogs_conf.set('HAVE_BACKTRACE', 1)
+            conf.set('HAVE_BACKTRACE', 1)
             libexecinfo += execinfo_dep
         endif
     endif
@@ -206,15 +204,15 @@ clock_gettime_test_code = '''
     }'''
 librt = []
 if cc.links(clock_gettime_test_code, name : 'clock_gettime')
-    ogs_conf.set('HAVE_CLOCK_GETTIME', 1)
+    conf.set('HAVE_CLOCK_GETTIME', 1)
 elif cc.links(clock_gettime_test_code, args : '-lrt', name : 'clock_gettime in librt')
-    ogs_conf.set('HAVE_CLOCK_GETTIME', 1)
+    conf.set('HAVE_CLOCK_GETTIME', 1)
     librt = cc.find_library('rt')
 endif
 
 # Check for /dev/urandom
 if run_command('[', '-c', '/dev/urandom', ']').returncode() == 0
-    ogs_conf.set_quoted('OGS_DEV_RANDOM', '/dev/urandom',
+    conf.set_quoted('OGS_DEV_RANDOM', '/dev/urandom',
                   description: 'a suitable file to read random data from')
 endif
 
@@ -225,12 +223,12 @@ if cc.links('''#include <sys/eventfd.h>
                    eventfd (0, EFD_CLOEXEC);
                    return 0;
                }''', name : 'eventfd(2) system call')
-    ogs_conf.set('HAVE_EVENTFD', 1)
+    conf.set('HAVE_EVENTFD', 1)
 endif
 
 # Check for epoll
 if have_func_epoll_ctl
-    ogs_conf.set('HAVE_EPOLL', 1,
+    conf.set('HAVE_EPOLL', 1,
                   description: 'Defined if your system supports the epoll system calls')
 endif
 
@@ -261,7 +259,7 @@ if host_system != 'windows'
                           return 0;
                       }''',
                       name : 'ioctl with request SIOCGIFADDR')
-        ogs_conf.set('HAVE_SIOCGIFADDR', '/**/')
+        conf.set('HAVE_SIOCGIFADDR', '/**/')
     endif
 endif
 
@@ -277,4 +275,4 @@ if build_tests
   subdir('tests')
 endif
 
-configure_file(output : 'config.h', configuration : ogs_conf)
+configure_file(output : 'config.h', configuration : conf)
