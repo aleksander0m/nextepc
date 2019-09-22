@@ -30,9 +30,9 @@ static fsm_event_t exit_event = {
     OGS_FSM_EXIT_SIG,
 };
 
-char *OGS_FSM_NAME_INIT_SIG = "INIT";
-char *OGS_FSM_NAME_ENTRY_SIG = "ENTRY";
-char *OGS_FSM_NAME_EXIT_SIG = "EXIT";
+const char *OGS_FSM_NAME_INIT_SIG = "INIT";
+const char *OGS_FSM_NAME_ENTRY_SIG = "ENTRY";
+const char *OGS_FSM_NAME_EXIT_SIG = "EXIT";
 
 void ogs_fsm_init(void *sm, void *event)
 {

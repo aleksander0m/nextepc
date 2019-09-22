@@ -1,9 +1,9 @@
-ogs_headers = files('''
+core_headers = files('''
     ogs-core.h
 '''.split())
-install_headers(ogs_headers, subdir : 'open5gs')
+install_headers(core_headers, subdir : 'open5gs')
 
-ogs_sub_headers = files('''
+core_sub_headers = files('''
     ogs-compat.h
     ogs-macros.h
     ogs-pool.h
@@ -41,9 +41,9 @@ ogs_sub_headers = files('''
     abts.h
 '''.split())
 
-install_headers(ogs_sub_headers, subdir : 'open5gs/core')
+install_headers(core_sub_headers, subdir : 'open5gs/core')
 
-ogs_sources = files('''
+core_sources = files('''
     ogs-abort.c
     ogs-errno.c
     ogs-strings.c
@@ -78,3 +78,11 @@ ogs_sources = files('''
     ogs-core.c
     abts.c
 '''.split())
+
+libogscore = library('ogscore',
+    sources : [core_sources],
+    install : true,
+    include_directories : [configinc, srcinc],
+    dependencies : [threads, librt, libexecinfo, libsocket],
+    c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_CORE_COMPILATION'],
+)

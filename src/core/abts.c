@@ -237,7 +237,10 @@ void abts_log_message(const char *fmt, ...)
 
     if (verbose) {
         va_start(args, fmt);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
         vfprintf(stderr, fmt, args);
+#pragma GCC diagnostic pop
         va_end(args);
         fprintf(stderr, "\n");
         fflush(stderr);
@@ -565,24 +568,24 @@ int abts_main(int argc, char **argv, char **argv_out)
         testlist[i++] = arg;
     }
 
-    if (optarg.enable_debug) optarg.log_level = "debug";
-    if (optarg.enable_trace) optarg.log_level = "trace";
+    if (optarg.enable_debug) optarg.log_level = (char*)"debug";
+    if (optarg.enable_trace) optarg.log_level = (char*)"trace";
 
     i = 0;
     argv_out[i++] = argv[0];
 
-    argv_out[i++] = "-e";
+    argv_out[i++] = (char*)"-e";
     if (!optarg.log_level) 
-        argv_out[i++] = "error"; /* Default LOG Level : ERROR */
+        argv_out[i++] = (char*)"error"; /* Default LOG Level : ERROR */
     else 
         argv_out[i++] = optarg.log_level;
 
     if (optarg.config_file) {
-        argv_out[i++] = "-c";
+        argv_out[i++] = (char*)"-c";
         argv_out[i++] = optarg.config_file;
     }
     if (optarg.domain_mask) {
-        argv_out[i++] = "-m";
+        argv_out[i++] = (char*)"-m";
         argv_out[i++] = optarg.domain_mask;
     }
 

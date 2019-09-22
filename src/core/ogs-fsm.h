@@ -28,9 +28,9 @@
 extern "C" {
 #endif
 
-extern char *OGS_FSM_NAME_INIT_SIG;
-extern char *OGS_FSM_NAME_ENTRY_SIG;
-extern char *OGS_FSM_NAME_EXIT_SIG;
+extern const char *OGS_FSM_NAME_INIT_SIG;
+extern const char *OGS_FSM_NAME_ENTRY_SIG;
+extern const char *OGS_FSM_NAME_EXIT_SIG;
 
 typedef enum {
     OGS_FSM_ENTRY_SIG,

@@ -572,7 +572,7 @@ static char *log_domain(char *buf, char *last,
 static char *log_level(char *buf, char *last,
         ogs_log_level_e level, int use_color)
 {
-    char *colors[] = {
+    const char *colors[] = {
         TA_NOR,
         TA_FGC_BOLD_RED, TA_FGC_BOLD_YELLOW, TA_FGC_BOLD_CYAN,
         TA_FGC_BOLD_GREEN, TA_FGC_BOLD_WHITE, TA_FGC_WHITE,
@@ -592,7 +592,10 @@ static char *log_content(char *buf, char *last,
     va_list bp;
 
     va_copy(bp, ap);
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-nonliteral"
     buf = ogs_vslprintf(buf, last, format, bp);
+#pragma GCC diagnostic pop
     va_end(bp);
 
     return buf;
