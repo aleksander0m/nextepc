@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ogs-crypt.h"
+#include "open5gs/ogs-crypt.h"
 #include "core/abts.h"
 
 static void sha1_test1(abts_case *tc, void *data)

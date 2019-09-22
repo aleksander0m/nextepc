@@ -17,8 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ogs-core.h"
-#include "ogs-crypt.h"
+#include "open5gs/ogs-core.h"
+#include "open5gs/ogs-crypt.h"
 #include "core/abts.h"
 
 typedef struct {

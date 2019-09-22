@@ -125,9 +125,8 @@ add_project_link_arguments(
     language : 'c')
 
 includes = include_directories('''
-    src/shared/core
-    src/shared/crypt
-    src/shared
+    include
+    lib
     src
     .
 '''.split())
@@ -304,8 +303,9 @@ config_h = configure_file(
         output : 'config.h',
         configuration : conf)
 
-subdir('src/shared/core')
-subdir('src/shared/crypt')
+subdir('include/open5gs')
+subdir('lib/core')
+subdir('lib/crypt')
 # Don’t build the tests unless we can run them (either natively or in an exe wrapper)
 build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper())
 if build_tests
