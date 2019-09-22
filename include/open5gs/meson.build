@@ -9,4 +9,4 @@ open5gs_header = files('''
     ogs-diameter.h
     ogs-gtp.h
 '''.split())
-install_headers(open5gs_header, subdir : 'open5gs')
+#install_headers(open5gs_header, subdir : 'open5gs')

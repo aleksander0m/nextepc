@@ -10,7 +10,7 @@ crypt_headers = files('''
     zuc.h
     kasumi.h
 '''.split())
-install_headers(crypt_headers, subdir : 'open5gs/crypt')
+#install_headers(crypt_headers, subdir : 'open5gs/crypt')
 
 crypt_sources = files('''
     ogs-aes.c

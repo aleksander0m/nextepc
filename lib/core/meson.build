@@ -35,8 +35,7 @@ core_headers = files('''
     ogs-3gpp-types.h
     abts.h
 '''.split())
-
-install_headers(core_headers, subdir : 'open5gs/core')
+#install_headers(core_headers, subdir : 'open5gs/core')
 
 core_sources = files('''
     ogs-abort.c
