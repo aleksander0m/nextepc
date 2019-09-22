@@ -41,7 +41,7 @@ asn1c_headers = files('''
     oer_encoder.h
     oer_support.h
 '''.split())
-install_headers(asn1c_headers, subdir : 'open5gs/asn1c')
+#install_headers(asn1c_headers, subdir : 'open5gs/asn1c/common')
 
 asn1c_sources = files('''
     ANY.c
@@ -93,14 +93,15 @@ asn1c_sources = files('''
     constr_SET_OF_oer.c
 '''.split())
 
-libogsasn1c = library('ogsasn1c',
+libogs_asn1c = library('ogs-asn1c',
     sources : [asn1c_sources],
-    c_args : ['-DHAVE_CONFIG_H=1'],
     install : true,
     include_directories : includes,
+    dependencies : libogscore_dep,
 )
 
-libogsasn1c_dep = declare_dependency(
-    link_with : libogsasn1c,
+libogs_asn1c_dep = declare_dependency(
+    link_with : libogs_asn1c,
     include_directories : includes,
+    dependencies : libogscore_dep,
 )

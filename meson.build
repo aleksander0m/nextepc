@@ -35,23 +35,22 @@ host_system = host_machine.system()
 # Compiler flags
 if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     possible_cc_flags = [
-        '-Wall',
+        '-Wextra',
         '-Wlogical-op',
         '-Werror=missing-include-dirs',
-        '-Wold-style-definition',
         '-Werror=pointer-arith',
         '-Werror=init-self',
         '-Wfloat-equal',
-        '-Wsuggest-attribute=noreturn',
-        ## TODO : '-Werror=missing-prototypes',
+        ## core: '-Wsuggest-attribute=noreturn',
+        ## core: '-Werror=missing-prototypes',
         '-Werror=implicit-function-declaration',
-        '-Werror=missing-declarations',
+        ## core: '-Werror=missing-declarations',
         '-Werror=return-type',
         '-Werror=incompatible-pointer-types',
         '-Werror=format=2',
         '-Wstrict-prototypes',
         '-Wredundant-decls',
-        '-Wimplicit-fallthrough=5',
+        ## asn1c: '-Wimplicit-fallthrough=5',
         '-Wendif-labels',
         '-Wstrict-aliasing=2',
         '-Wwrite-strings',
@@ -60,35 +59,20 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
         '-Werror=shift-overflow=2',
         '-Wdate-time',
         '-Wnested-externs',
+        '-Wunused',
+        '-Wduplicated-branches',
+        '-Wmisleading-indentation',
 
-        # negative arguments are correctly detected starting with meson 0.46.
+        '-Wno-sign-compare',
         '-Wno-unused-parameter',
-        '-Wno-missing-field-initializers',
-        '-Wno-unused-result',
-        '-Wno-format-signedness',
-        '-Wno-error=#warnings',  # clang
-        '-Wno-string-plus-int',  # clang
-
-        # work-around for gcc 7.1 turning this on on its own.
-        '-Wno-error=nonnull',
-
-        # Disable -Wmaybe-uninitialized, since it's noisy on gcc 8 with
-        # optimizations enabled, producing essentially false positives.
-        '-Wno-maybe-uninitialized',
+        '-Wno-missing-field-initializers', ## for asn1c
 
         '-ffast-math',
-        '-fno-common',
         '-fdiagnostics-show-option',
-        '-fno-strict-aliasing',
         ## TODO : '-fvisibility=hidden',
         '-fstack-protector',
         '-fstack-protector-strong',
         '--param=ssp-buffer-size=4',
-
-        '-Wduplicated-branches',
-        '-Wmisleading-indentation',
-        '-Wno-typedef-redefinition',
-        '-Wunused',
     ]
     # --as-needed and --no-undefined are provided by meson by default,
     # run mesonconf to see what is enabled
@@ -126,6 +110,8 @@ add_project_link_arguments(
 
 includes = include_directories('''
     include
+    lib/asn1c/common
+    lib/asn1c/s1ap
     lib
     src
     .
@@ -306,8 +292,8 @@ config_h = configure_file(
 subdir('include/open5gs')
 subdir('lib/core')
 subdir('lib/crypt')
-#subdir('lib/asn1c/common')
-#subdir('lib/asn1c/s1ap')
+subdir('lib/asn1c/common')
+subdir('lib/asn1c/s1ap')
 # Don’t build the tests unless we can run them (either natively or in an exe wrapper)
 build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper())
 if build_tests
