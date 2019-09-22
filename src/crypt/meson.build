@@ -32,13 +32,14 @@ crypt_sources = files('''
 
 libogscrypt = library('ogscrypt',
     sources : [crypt_sources],
+    c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_CRYPT_COMPILATION'],
     install : true,
     include_directories : includes,
     dependencies : libogscore_dep,
-    c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_CRYPT_COMPILATION'],
 )
 
 libogscrypt_dep = declare_dependency(
     link_with : libogscrypt,
     include_directories : includes,
+    dependencies : libogscore_dep,
 )

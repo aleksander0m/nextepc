@@ -1,13 +1,13 @@
-sources = files(
-	'aes-test.c',
-    'sha-test.c',
-	'abts-main.c',
-)
+sources = files('''
+	aes-test.c
+    sha-test.c
+	abts-main.c
+'''.split())
 
 exe = executable('testcrypt',
     sources : [sources],
     include_directories : includes,
-    dependencies : [libogscore_dep, libogscrypt_dep],
+    dependencies : libogscrypt_dep,
 )
 
 test('testcrypt', exe)
