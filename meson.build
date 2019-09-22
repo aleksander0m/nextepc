@@ -125,8 +125,9 @@ add_project_link_arguments(
     language : 'c')
 
 includes = include_directories('''
-    src/core
-    src/crypt
+    src/shared/core
+    src/shared/crypt
+    src/shared
     src
     .
 '''.split())
@@ -303,8 +304,8 @@ config_h = configure_file(
         output : 'config.h',
         configuration : conf)
 
-subdir('src/core')
-subdir('src/crypt')
+subdir('src/shared/core')
+subdir('src/shared/crypt')
 # Don’t build the tests unless we can run them (either natively or in an exe wrapper)
 build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper())
 if build_tests
