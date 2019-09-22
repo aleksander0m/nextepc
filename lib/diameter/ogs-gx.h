@@ -20,7 +20,7 @@
 #ifndef OGS_DIAMETER_GX_H
 #define OGS_DIAMETER_GX_H
 
-#include "ogs-diameter.h"
+#include "open5gs/ogs-diameter.h"
 
 #define OGS_DIAMETER_INSIDE
 

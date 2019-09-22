@@ -34,7 +34,7 @@
 * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.								 *
 *********************************************************************************************************/
 
-#include "ogs-diameter.h"
+#include "open5gs/ogs-diameter.h"
 
 /* Search a given AVP model in an AVP (extracted from libfreediameter/message.c ) */
 int fd_avp_search_avp ( struct avp * groupedavp, struct dict_object * what, struct avp ** avp )

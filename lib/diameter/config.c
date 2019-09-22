@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ogs-diameter.h"
+#include "open5gs/ogs-diameter.h"
 
 static int diam_config_apply(ogs_diam_config_t *fd_config)
 {

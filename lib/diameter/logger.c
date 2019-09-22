@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ogs-diameter.h"
+#include "open5gs/ogs-diameter.h"
 
 static struct ogs_diam_logger_t self;
 
