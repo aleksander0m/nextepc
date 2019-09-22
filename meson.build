@@ -18,6 +18,7 @@
 project('open5gs', 'c',
     version : '1.0.0',
     license : 'AGPL-3.0-or-later',
+    meson_version : '>= 0.51',
     default_options : [
         'warning_level=1',
         'c_std=gnu89',
@@ -25,7 +26,6 @@ project('open5gs', 'c',
         'sysconfdir=/etc',
         'localstatedir=/var',
     ],
-    meson_version : '>= 0.46',
 )
 
 conf = configuration_data()
@@ -45,8 +45,10 @@ includedir = join_paths(prefixdir, get_option('includedir'))
 datadir = join_paths(prefixdir, get_option('datadir'))
 localstatedir = join_paths('/', get_option('localstatedir'))
 
-cc = meson.get_compiler('c')
 pkgconfig = import('pkgconfig')
+cmake = import('cmake')
+
+cc = meson.get_compiler('c')
 host_system = host_machine.system()
 
 # Compiler flags

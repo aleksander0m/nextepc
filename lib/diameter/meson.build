@@ -30,6 +30,8 @@ diameter_sources = files('''
     init.c
 '''.split())
 
+freeDiameter = cmake.subproject('freeDiameter')
+
 libogsdiameter = library('ogsdiameter',
     sources : [diameter_sources],
     c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_DIAM_COMPILATION'],
