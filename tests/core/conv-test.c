@@ -96,21 +96,21 @@ static void conv_test4(abts_case *tc, void *data)
 static void conv_test5(abts_case *tc, void *data)
 {
     ABTS_TRUE(tc, 0x0123456789abcdef ==
-            ogs_buffer_to_uint64("\x01\x23\x45\x67\x89\xab\xcd\xef", 8));
+            ogs_buffer_to_uint64((void*)"\x01\x23\x45\x67\x89\xab\xcd\xef", 8));
     ABTS_TRUE(tc, 0x0123456789abcd ==
-            ogs_buffer_to_uint64("\x01\x23\x45\x67\x89\xab\xcd", 7));
+            ogs_buffer_to_uint64((void*)"\x01\x23\x45\x67\x89\xab\xcd", 7));
     ABTS_TRUE(tc, 0x0123456789ab ==
-            ogs_buffer_to_uint64("\x01\x23\x45\x67\x89\xab", 6));
+            ogs_buffer_to_uint64((void*)"\x01\x23\x45\x67\x89\xab", 6));
     ABTS_TRUE(tc, 0x0123456789 ==
-            ogs_buffer_to_uint64("\x01\x23\x45\x67\x89", 5));
+            ogs_buffer_to_uint64((void*)"\x01\x23\x45\x67\x89", 5));
     ABTS_TRUE(tc, 0x01234567 ==
-            ogs_buffer_to_uint64("\x01\x23\x45\x67", 4));
+            ogs_buffer_to_uint64((void*)"\x01\x23\x45\x67", 4));
     ABTS_TRUE(tc, 0x012345 ==
-            ogs_buffer_to_uint64("\x01\x23\x45", 3));
+            ogs_buffer_to_uint64((void*)"\x01\x23\x45", 3));
     ABTS_TRUE(tc, 0x0123 ==
-            ogs_buffer_to_uint64("\x01\x23", 2));
+            ogs_buffer_to_uint64((void*)"\x01\x23", 2));
     ABTS_TRUE(tc, 0x01 ==
-            ogs_buffer_to_uint64("\x01", 1));
+            ogs_buffer_to_uint64((void*)"\x01", 1));
 }
 
 static void conv_test6(abts_case *tc, void *data)

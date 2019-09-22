@@ -28,7 +28,7 @@
 extern "C" {
 #endif
 
-#define OGS_HEX(I, I_LEN, O) ogs_ascii_to_hex(I, I_LEN, O, sizeof(O))
+#define OGS_HEX(I, I_LEN, O) ogs_ascii_to_hex((char*)I, I_LEN, O, sizeof(O))
 void *ogs_ascii_to_hex(char *in, int in_len, void *out, int out_len);
 void *ogs_hex_to_ascii(void *in, int in_len, void *out, int out_len);
 void *ogs_uint64_to_buffer(uint64_t num, int size, void *buffer);

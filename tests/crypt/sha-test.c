@@ -67,7 +67,7 @@ static void sha1_test1(abts_case *tc, void *data)
 
 static void sha2_test1(abts_case *tc, void *data)
 {
-    char *vectors[4][3] =
+    const char *vectors[4][3] =
     {   /* SHA-224 */
         {
         "\x23\x09\x7d\x22\x34\x05\xd8\x22\x86\x42\xa4\x77\xbd\xa2\x55\xb3\x2a\xad\xbc\xe4\xbd\xa0\xb3\xf7\xe3\x6c\x9d\xa7",

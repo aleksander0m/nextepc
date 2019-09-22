@@ -6,7 +6,7 @@ sources = files(
 
 exe = executable('testcrypt',
     sources : [sources],
-    include_directories : configinc,
+    include_directories : includes,
     dependencies : [libogscore_dep, libogscrypt_dep],
 )
 

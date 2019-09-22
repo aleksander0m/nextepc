@@ -21,7 +21,7 @@ sources = files(
 
 exe = executable('testcore',
     sources : [sources],
-    include_directories : configinc,
+    include_directories : includes,
     dependencies : libogscore_dep,
 )
 
