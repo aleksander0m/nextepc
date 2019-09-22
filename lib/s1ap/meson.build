@@ -19,7 +19,7 @@ s1ap_headers = files('''
 	conv.h
     message.h 
 '''.split())
-install_headers(s1ap_headers, subdir : 'open5gs/s1ap')
+#install_headers(s1ap_headers, subdir : 'open5gs/s1ap')
 
 s1ap_sources = files('''
     conv.c 
