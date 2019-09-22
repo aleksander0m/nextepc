@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ogs-s1ap.h"
+#include "open5gs/ogs-s1ap.h"
 
 int __ogs_s1ap_domain;
 

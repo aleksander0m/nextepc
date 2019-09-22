@@ -20,7 +20,7 @@
 #ifndef OGS_S1AP_H
 #define OGS_S1AP_H
 
-#include "ogs-common.h"
+#include "open5gs/ogs-core.h"
 
 #include "S1AP_Additional-GUTI.h"
 #include "S1AP_AdditionalCSFallbackIndicator.h"

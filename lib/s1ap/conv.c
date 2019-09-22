@@ -17,7 +17,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ogs-s1ap.h"
+#include "open5gs/ogs-s1ap.h"
 
 void ogs_s1ap_uint8_to_OCTET_STRING(
         uint8_t uint8, OCTET_STRING_t *octet_string)
