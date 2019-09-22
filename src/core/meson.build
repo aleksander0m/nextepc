@@ -82,7 +82,15 @@ core_sources = files('''
 libogscore = library('ogscore',
     sources : [core_sources],
     install : true,
-    include_directories : [configinc, srcinc],
-    dependencies : [threads, librt, libexecinfo, libsocket],
+    include_directories : includes,
+    dependencies : [threads,
+                    librt,
+                    libexecinfo,
+                    libsocket],
     c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_CORE_COMPILATION'],
+)
+
+libogscore_dep = declare_dependency(
+    link_with : libogscore,
+    include_directories : includes,
 )

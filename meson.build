@@ -43,7 +43,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
         '-Werror=init-self',
         '-Wfloat-equal',
         '-Wsuggest-attribute=noreturn',
-        '-Werror=missing-prototypes',
+        ## TODO : '-Werror=missing-prototypes',
         '-Werror=implicit-function-declaration',
         '-Werror=missing-declarations',
         '-Werror=return-type',
@@ -80,7 +80,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
         '-fno-common',
         '-fdiagnostics-show-option',
         '-fno-strict-aliasing',
-        '-fvisibility=hidden',
+        ## TODO : '-fvisibility=hidden',
         '-fstack-protector',
         '-fstack-protector-strong',
         '--param=ssp-buffer-size=4',
@@ -117,11 +117,19 @@ else
     possible_link_flags = []
 endif
 
-add_project_arguments(cc.get_supported_arguments(possible_cc_flags), language : 'c')
-add_project_link_arguments(cc.get_supported_link_arguments(possible_link_flags), language : 'c')
+add_project_arguments(
+    cc.get_supported_arguments(possible_cc_flags),
+    language : 'c')
+add_project_link_arguments(
+    cc.get_supported_link_arguments(possible_link_flags),
+    language : 'c')
 
-configinc = include_directories('.')
-srcinc = include_directories('src')
+includes = include_directories('''
+    src/core
+    src/crypt
+    src
+    .
+'''.split())
 
 #####################################################################
 # Core Library
@@ -296,6 +304,7 @@ config_h = configure_file(
         configuration : conf)
 
 subdir('src/core')
+subdir('src/crypt')
 # Don’t build the tests unless we can run them (either natively or in an exe wrapper)
 build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper())
 if build_tests
