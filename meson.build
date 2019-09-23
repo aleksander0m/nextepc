@@ -211,11 +211,15 @@ foreach f : functions
     endif
 endforeach
 
-# Check for dependency
-threads = dependency('threads')
-libexecinfo = cc.find_library('execinfo', required : false)
-librt = cc.find_library('rt', required : false)
-libsocket = cc.find_library('socket', required : false)
+# Determination of thread implementation
+threads = []
+if host_system == 'windows' and not get_option('force_posix_threads')
+else
+    threads = dependency('threads')
+    if cc.has_header_symbol('pthread.h', 'pthread_barrier_wait')
+        conf.set('HAVE_PTHREAD_BAR', 1)
+    endif
+endif
 
 # Check for sys_syslist
 if cc.has_header_symbol('signal.h', 'sys_siglist')
@@ -232,15 +236,14 @@ if have_func_strerror_r
                           char *ptr = strerror_r (-2, error_string, 256);
                           char c = *strerror_r (-2, error_string, 256);
                           return c != 0 && ptr != (void*) 0L;
-                      }
-                   ''',
-                   name : 'strerror_r() returns char *')
+                      }''', name : 'strerror_r() returns char *')
         conf.set('STRERROR_R_CHAR_P', 1,
                 description: 'Defined if strerror_r returns char *')
     endif
 endif
 
 # Check for backtrace()
+libexecinfo = cc.find_library('execinfo', required : false)
 if conf.has('HAVE_EXECINFO_H')
     if cc.has_function('backtrace', prefix : '#include <execinfo.h>')
         conf.set('HAVE_BACKTRACE', 1)
@@ -258,12 +261,14 @@ clock_gettime_test_code = '''
     int main (int argc, char ** argv) {
         return clock_gettime(CLOCK_REALTIME, &t);
     }'''
+librt = []
 if cc.links(clock_gettime_test_code, name : 'clock_gettime()')
     conf.set('HAVE_CLOCK_GETTIME', 1)
-elif librt.found() and cc.links(clock_gettime_test_code,
-                                dependencies : librt,
-                                name : 'clock_gettime() in -lrt')
+elif cc.links(clock_gettime_test_code, args : '-lrt', name : 'clock_gettime() in librt')
     conf.set('HAVE_CLOCK_GETTIME', 1)
+    librt = cc.find_library('rt')
+else
+    error('Could not find clock_gettime()')
 endif
 
 # Check for /dev/urandom
@@ -288,6 +293,7 @@ if have_func_epoll_ctl
 endif
 
 # Check for socket
+libsocket = cc.find_library('socket', required : false)
 if host_system != 'windows'
     # socket()
     socket_test = '''#include <sys/types.h>
@@ -303,6 +309,19 @@ if host_system != 'windows'
         error('Could not find socket()')
     endif
 endif
+
+# Dependency: usrsctp
+#sctp_debug = get_option('debug_level') >= 7
+#usrsctp_dep = dependency('usrsctp',
+#    version: ['>=1.0.0', '<2'],
+#    fallback: ['usrsctp', 'usrsctp_dep'],
+#    default_options: [
+#        'sctp_build_programs=false',
+#        'sctp_debug=@0@'.format(sctp_debug),
+#        'sctp_inet=false',
+#        'sctp_inet6=false',
+#    ],
+#    required: true)
 
 config_h = configure_file(
         output : 'config.h',
