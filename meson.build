@@ -185,21 +185,21 @@ foreach h : headers
     endif
 endforeach
 
-functions = [
-    'arc4random',
-    'arc4random_buf',
-    'getrandom',
-    'localtime_r',
-    'getifaddrs',
-    'getenv',
-    'putenv',
-    'setenv',
-    'unsetenv',
-    'strerror_r',
-    'eventfd',
-    'kqueue',
-    'epoll_ctl',
-]
+functions = ('''
+    arc4random
+    arc4random_buf
+    getrandom
+    localtime_r
+    getifaddrs
+    getenv
+    putenv
+    setenv
+    unsetenv
+    strerror_r
+    eventfd
+    kqueue
+    epoll_ctl
+'''.split())
 
 foreach f : functions
     if cc.has_function(f)
