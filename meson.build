@@ -64,7 +64,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
         ## core: '-Werror=missing-declarations',
         '-Werror=return-type',
         '-Werror=incompatible-pointer-types',
-        '-Werror=format=2',
+        ## asn1c: '-Werror=format=2',
         ## diameter: '-Wstrict-prototypes',
         '-Wredundant-decls',
         ## asn1c: '-Wimplicit-fallthrough=5',
@@ -82,7 +82,8 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
 
         '-Wno-sign-compare',
         '-Wno-unused-parameter',
-        '-Wno-missing-field-initializers', ## for asn1c
+        '-Wno-missing-field-initializers',  ## for asn1c
+        '-Wno-parentheses-equality',        ## for asn1c
 
         '-ffast-math',
         '-fdiagnostics-show-option',

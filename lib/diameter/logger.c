@@ -85,7 +85,7 @@ static void ogs_diam_logger_cb(enum fd_hook_type type, struct msg * msg,
     struct peer_hdr * peer, void * other, struct fd_hook_permsgdata *pmd, 
     void * regdata)
 {
-	char * peer_name = peer ? peer->info.pi_diamid : "<unknown peer>";
+	const char * peer_name = peer ? peer->info.pi_diamid : "<unknown peer>";
 	
 	CHECK_POSIX_DO( pthread_mutex_lock(&mtx), );
 

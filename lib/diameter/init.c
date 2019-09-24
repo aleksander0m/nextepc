@@ -119,7 +119,7 @@ static void diam_log_func(int printlevel,
         break;
     case FD_LOG_FATAL:
         {
-            char *except = "Initiating freeDiameter shutdown sequence";
+            const char *except = "Initiating freeDiameter shutdown sequence";
             if (strncmp(buffer, except, strlen(except)) == 0)
                 ogs_info("[%d]: %s:%u %s", printlevel, fname, line, buffer);
             else

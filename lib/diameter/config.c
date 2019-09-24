@@ -188,7 +188,7 @@ int ogs_diam_config_init(ogs_diam_config_t *fd_config)
 	/* Display configuration */
 	b = fd_conf_dump(&buf, &len, NULL);
     LOG_SPLIT(FD_LOG_NOTICE, NULL, 
-            b ?: "<Error during configuration dump...>", NULL);
+            b ?: (char*)"<Error during configuration dump...>", NULL);
 	free(buf);	
 	
 	/* Since some extensions might have modified the definitions from the dict_base_protocol, we only load the objects now */
