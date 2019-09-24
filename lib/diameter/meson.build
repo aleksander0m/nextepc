@@ -30,18 +30,19 @@ diameter_sources = files('''
     init.c
 '''.split())
 
-freeDiameter = cmake.subproject('freeDiameter')
+libogs_fdcore_dep = dependency('libogs-fdcore',
+        fallback : ['freeDiameter', 'libogs_fdcore_dep'])
 
 libogsdiameter = library('ogsdiameter',
     sources : [diameter_sources],
     c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_DIAM_COMPILATION'],
     install : true,
     include_directories : includes,
-    dependencies : libogscore_dep,
+    dependencies : [libogscore_dep, libogs_fdcore_dep],
 )
 
 libogsdiameter_dep = declare_dependency(
     link_with : libogsdiameter,
     include_directories : includes,
-    dependencies : libogscore_dep,
+    dependencies : [libogscore_dep, libogs_fdcore_dep],
 )

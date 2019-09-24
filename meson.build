@@ -65,7 +65,7 @@ if cc.get_id() == 'gcc' or cc.get_id() == 'clang'
         '-Werror=return-type',
         '-Werror=incompatible-pointer-types',
         '-Werror=format=2',
-        '-Wstrict-prototypes',
+        ## diameter: '-Wstrict-prototypes',
         '-Wredundant-decls',
         ## asn1c: '-Wimplicit-fallthrough=5',
         '-Wendif-labels',
@@ -334,7 +334,7 @@ subdir('lib/crypt')
 subdir('lib/asn1c/common')
 subdir('lib/asn1c/s1ap')
 subdir('lib/s1ap')
-#subdir('lib/diameter')
+subdir('lib/diameter')
 # Don’t build the tests unless we can run them (either natively or in an exe wrapper)
 build_tests = not meson.is_cross_build() or (meson.is_cross_build() and meson.has_exe_wrapper())
 if build_tests

@@ -23,7 +23,7 @@
 #include "freeDiameter/freeDiameter-host.h"
 #include "freeDiameter/libfdcore.h"
 
-#include "ogs-common.h"
+#include "open5gs/ogs-core.h"
 
 #define OGS_MAX_NUM_OF_PCC_RULE         8   /* Num of PCC Rule */
 

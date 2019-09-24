@@ -1,3 +1,6 @@
+# subprojects
+subprojects/freeDiameter/
+
 # webui
 webui/.next/
 webui/node_modules/
