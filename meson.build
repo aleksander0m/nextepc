@@ -23,8 +23,6 @@ project('open5gs', 'c',
         'warning_level=1',
         'c_std=gnu89',
         'prefix=/usr',
-        'sysconfdir=/etc',
-        'localstatedir=/var',
     ],
 )
 
@@ -267,6 +265,9 @@ if cc.links(clock_gettime_test_code, name : 'clock_gettime()')
 elif cc.links(clock_gettime_test_code, args : '-lrt', name : 'clock_gettime() in librt')
     conf.set('HAVE_CLOCK_GETTIME', 1)
     librt = cc.find_library('rt')
+elif cc.links(clock_gettime_test_code, args : '-lposix4', name : 'clock_gettime() in libposix4')
+    conf.set('HAVE_CLOCK_GETTIME', 1)
+    librt = cc.find_library('posix4')
 else
     error('Could not find clock_gettime()')
 endif
