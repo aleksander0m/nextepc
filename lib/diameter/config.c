@@ -19,6 +19,11 @@
 
 #include "open5gs/ogs-diameter.h"
 
+int fd_ext_add(char *filename, char *conffile);
+int fd_rtdisp_init(void);
+int fd_ext_load();
+int fd_msg_init(void);
+
 static int diam_config_apply(ogs_diam_config_t *fd_config)
 {
     struct addrinfo hints, *ai;
@@ -163,7 +168,6 @@ static int diam_config_apply(ogs_diam_config_t *fd_config)
                 fclose(fd);
         }
 
-        extern int fd_ext_add( char * filename, char * conffile );
         CHECK_FCT_DO( fd_ext_add( fname, cfname ), return OGS_ERROR );
     }
 
@@ -178,11 +182,9 @@ int ogs_diam_config_init(ogs_diam_config_t *fd_config)
 	CHECK_FCT( diam_config_apply(fd_config) );
 	
 	/* The following module use data from the configuration */
-    int fd_rtdisp_init(void);
 	CHECK_FCT( fd_rtdisp_init() );
 
     /* Now, load all dynamic extensions */
-    int fd_ext_load();
     CHECK_FCT( fd_ext_load()  );
 
 	/* Display configuration */
@@ -192,7 +194,6 @@ int ogs_diam_config_init(ogs_diam_config_t *fd_config)
 	free(buf);	
 	
 	/* Since some extensions might have modified the definitions from the dict_base_protocol, we only load the objects now */
-    int fd_msg_init(void);
 	CHECK_FCT( fd_msg_init()    );
 	
     return OGS_OK;
