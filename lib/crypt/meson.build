@@ -42,16 +42,17 @@ crypt_sources = files('''
     kasumi.c
 '''.split())
 
-libogscrypt = library('ogscrypt',
+libcrypt = library('crypt',
     sources : [crypt_sources],
     c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_CRYPT_COMPILATION'],
     install : true,
+    install_dir : ogslibdir,
     include_directories : includes,
-    dependencies : libogscore_dep,
+    dependencies : libcore_dep,
 )
 
-libogscrypt_dep = declare_dependency(
-    link_with : libogscrypt,
+libcrypt_dep = declare_dependency(
+    link_with : libcrypt,
     include_directories : includes,
-    dependencies : libogscore_dep,
+    dependencies : libcore_dep,
 )

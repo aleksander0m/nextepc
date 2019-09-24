@@ -26,16 +26,17 @@ s1ap_sources = files('''
     message.c
 '''.split())
 
-libogss1ap = library('ogss1ap',
+libs1ap = library('s1ap',
     sources : [s1ap_sources],
     c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_S1AP_COMPILATION'],
     install : true,
+    install_dir : ogslibdir,
     include_directories : includes,
-    dependencies : libogs_asn1c_s1ap_dep,
+    dependencies : libasn1cs1ap_dep,
 )
 
-libogss1ap_dep = declare_dependency(
-    link_with : libogss1ap,
+libs1ap_dep = declare_dependency(
+    link_with : libs1ap,
     include_directories : includes,
-    dependencies : libogs_asn1c_s1ap_dep,
+    dependencies : libasn1cs1ap_dep,
 )

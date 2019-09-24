@@ -39,7 +39,7 @@ sources = files('''
 exe = executable('testcore',
     sources : [sources],
     include_directories : includes,
-    dependencies : libogscore_dep,
+    dependencies : libcore_dep,
 )
 
 test('testcore', exe)

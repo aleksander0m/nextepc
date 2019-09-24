@@ -33,16 +33,17 @@ diameter_sources = files('''
 libfdcore_dep = dependency('libfdcore',
         fallback : ['freeDiameter', 'libfdcore_dep'])
 
-libogsdiameter = library('ogsdiameter',
+libdiameter = library('diameter',
     sources : [diameter_sources],
     c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_DIAM_COMPILATION'],
     install : true,
+    install_dir : ogslibdir,
     include_directories : includes,
-    dependencies : [libogscore_dep, libfdcore_dep],
+    dependencies : [libcore_dep, libfdcore_dep],
 )
 
-libogsdiameter_dep = declare_dependency(
-    link_with : libogsdiameter,
+libdiameter_dep = declare_dependency(
+    link_with : libdiameter,
     include_directories : includes,
-    dependencies : [libogscore_dep, libfdcore_dep],
+    dependencies : [libcore_dep, libfdcore_dep],
 )

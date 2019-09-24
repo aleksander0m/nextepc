@@ -1052,15 +1052,16 @@ s1ap_sources = files('''
     S1AP_PrivateIE-Field.c
 '''.split())
 
-libogs_asn1c_s1ap = library('ogs-asn1c-s1ap',
+libasn1cs1ap = library('asn1cs1ap',
     sources : [s1ap_sources],
     install : true,
+    install_dir : ogslibdir,
     include_directories : includes,
-    dependencies : libogs_asn1c_dep,
+    dependencies : libasn1c_dep,
 )
 
-libogs_asn1c_s1ap_dep = declare_dependency(
-    link_with : libogs_asn1c_s1ap,
+libasn1cs1ap_dep = declare_dependency(
+    link_with : libasn1cs1ap,
     include_directories : includes,
-    dependencies : libogs_asn1c_dep,
+    dependencies : libasn1c_dep,
 )

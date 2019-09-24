@@ -43,9 +43,9 @@ includedir = join_paths(prefixdir, get_option('includedir'))
 datadir = join_paths(prefixdir, get_option('datadir'))
 localstatedir = join_paths('/', get_option('localstatedir'))
 
-pkgconfig = import('pkgconfig')
-cmake = import('cmake')
+ogslibdir = join_paths(libdir, 'open5gs')
 
+pkgconfig = import('pkgconfig')
 cc = meson.get_compiler('c')
 host_system = host_machine.system()
 

@@ -90,10 +90,11 @@ core_sources = files('''
     abts.c
 '''.split())
 
-libogscore = library('ogscore',
+libcore = library('core',
     sources : [core_sources],
     c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_CORE_COMPILATION'],
     install : true,
+    install_dir : ogslibdir,
     include_directories : includes,
     dependencies : [threads,
                     librt,
@@ -101,8 +102,8 @@ libogscore = library('ogscore',
                     libsocket],
 )
 
-libogscore_dep = declare_dependency(
-    link_with : libogscore,
+libcore_dep = declare_dependency(
+    link_with : libcore,
     include_directories : includes,
     dependencies : [threads,
                     librt,

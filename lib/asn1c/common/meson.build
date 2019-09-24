@@ -110,15 +110,16 @@ asn1c_sources = files('''
     constr_SET_OF_oer.c
 '''.split())
 
-libogs_asn1c = library('ogs-asn1c',
+libasn1c = library('asn1c',
     sources : [asn1c_sources],
     install : true,
+    install_dir : ogslibdir,
     include_directories : includes,
-    dependencies : libogscore_dep,
+    dependencies : libcore_dep,
 )
 
-libogs_asn1c_dep = declare_dependency(
-    link_with : libogs_asn1c,
+libasn1c_dep = declare_dependency(
+    link_with : libasn1c,
     include_directories : includes,
-    dependencies : libogscore_dep,
+    dependencies : libcore_dep,
 )

@@ -24,7 +24,7 @@ sources = files('''
 exe = executable('testcrypt',
     sources : [sources],
     include_directories : includes,
-    dependencies : libogscrypt_dep,
+    dependencies : libcrypt_dep,
 )
 
 test('testcrypt', exe)
