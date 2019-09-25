@@ -31,6 +31,11 @@ diameter_sources = files('''
 '''.split())
 
 libfdcore_dep = dependency('libfdcore',
+        default_options : [
+            'pkglibdir=' + join_paths(pkglibdir, 'freeDiameter'),
+            'pkgincludedir=' + join_paths(pkgincludedir, 'freeDiameter'),
+            'fd_libdir=' + pkglibdir,
+        ],
         fallback : ['freeDiameter', 'libfdcore_dep'])
 
 libdiameter = library('diameter',
