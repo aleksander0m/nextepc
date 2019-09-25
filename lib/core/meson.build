@@ -52,7 +52,7 @@ core_headers = files('''
     ogs-3gpp-types.h
     abts.h
 '''.split())
-#install_headers(core_headers, subdir : 'open5gs/core')
+install_headers(core_headers, install_dir : join_paths(pkgincludedir, 'core'))
 
 core_sources = files('''
     ogs-abort.c
@@ -94,7 +94,7 @@ libcore = library('core',
     sources : [core_sources],
     c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_CORE_COMPILATION'],
     install : true,
-    install_dir : ogslibdir,
+    install_dir : pkglibdir,
     include_directories : includes,
     dependencies : [threads,
                     librt,

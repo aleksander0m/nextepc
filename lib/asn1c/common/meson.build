@@ -58,7 +58,7 @@ asn1c_headers = files('''
     oer_encoder.h
     oer_support.h
 '''.split())
-#install_headers(asn1c_headers, subdir : 'open5gs/asn1c/common')
+install_headers(asn1c_headers, install_dir : join_paths(pkgincludedir, 'asn1c/common'))
 
 asn1c_sources = files('''
     ANY.c
@@ -113,7 +113,7 @@ asn1c_sources = files('''
 libasn1c = library('asn1c',
     sources : [asn1c_sources],
     install : true,
-    install_dir : ogslibdir,
+    install_dir : pkglibdir,
     include_directories : includes,
     dependencies : libcore_dep,
 )

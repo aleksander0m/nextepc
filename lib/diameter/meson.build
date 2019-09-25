@@ -37,7 +37,7 @@ libdiameter = library('diameter',
     sources : [diameter_sources],
     c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_DIAM_COMPILATION'],
     install : true,
-    install_dir : ogslibdir,
+    install_dir : pkglibdir,
     include_directories : includes,
     dependencies : [libcore_dep, libfdcore_dep],
 )

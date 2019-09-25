@@ -535,7 +535,7 @@ s1ap_headers = files('''
     S1AP_PrivateIE-Field.h
     S1AP_asn_constant.h
 '''.split())
-#install_headers(s1ap_headers, subdir : 'open5gs/asn1c/s1ap')
+install_headers(s1ap_headers, install_dir : join_paths(pkgincludedir, 'asn1c/s1ap'))
 
 s1ap_sources = files('''
     S1AP_S1AP-PDU.c
@@ -1052,16 +1052,16 @@ s1ap_sources = files('''
     S1AP_PrivateIE-Field.c
 '''.split())
 
-libasn1cs1ap = library('asn1cs1ap',
+libs1apasn1c = library('s1apasn1c',
     sources : [s1ap_sources],
     install : true,
-    install_dir : ogslibdir,
+    install_dir : pkglibdir,
     include_directories : includes,
     dependencies : libasn1c_dep,
 )
 
-libasn1cs1ap_dep = declare_dependency(
-    link_with : libasn1cs1ap,
+libs1apasn1c_dep = declare_dependency(
+    link_with : libs1apasn1c,
     include_directories : includes,
     dependencies : libasn1c_dep,
 )

@@ -15,15 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-open5gs_header = files('''
+open5gs_headers = files('''
     ogs-core.h
+    ogs-s1ap.h
+'''.split())
+install_headers(open5gs_headers, install_dir : pkgincludedir)
+
+open5gs_not_installed_headers = files('''
     ogs-crypt.h
     ogs-dbi.h
     ogs-sctp.h
     ogs-app.h
-    ogs-s1ap.h
     ogs-nas.h
     ogs-diameter.h
     ogs-gtp.h
 '''.split())
-#install_headers(open5gs_header, subdir : 'open5gs')

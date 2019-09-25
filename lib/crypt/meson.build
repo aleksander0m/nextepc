@@ -46,7 +46,7 @@ libcrypt = library('crypt',
     sources : [crypt_sources],
     c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_CRYPT_COMPILATION'],
     install : true,
-    install_dir : ogslibdir,
+    install_dir : pkglibdir,
     include_directories : includes,
     dependencies : libcore_dep,
 )

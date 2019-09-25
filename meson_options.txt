@@ -1,0 +1,9 @@
+# -*- mode: meson -*-
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+option('pkglibdir', type : 'string', value : '',
+       description : 'directory for open5gs package libraries files')
+option('pkgincludedir', type : 'string', value : '',
+       description : 'directory for open5gs package includes files')
+option('pkgconfiglibdir', type : 'string', value : '',
+       description : 'directory for standard pkg-config files')

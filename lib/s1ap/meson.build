@@ -19,7 +19,7 @@ s1ap_headers = files('''
 	conv.h
     message.h 
 '''.split())
-#install_headers(s1ap_headers, subdir : 'open5gs/s1ap')
+install_headers(s1ap_headers, install_dir : join_paths(pkgincludedir, 's1ap'))
 
 s1ap_sources = files('''
     conv.c 
@@ -30,13 +30,13 @@ libs1ap = library('s1ap',
     sources : [s1ap_sources],
     c_args : ['-DHAVE_CONFIG_H=1', '-DOGS_S1AP_COMPILATION'],
     install : true,
-    install_dir : ogslibdir,
+    install_dir : pkglibdir,
     include_directories : includes,
-    dependencies : libasn1cs1ap_dep,
+    dependencies : libs1apasn1c_dep,
 )
 
 libs1ap_dep = declare_dependency(
     link_with : libs1ap,
     include_directories : includes,
-    dependencies : libasn1cs1ap_dep,
+    dependencies : libs1apasn1c_dep,
 )

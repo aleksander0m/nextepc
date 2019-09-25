@@ -43,7 +43,9 @@ includedir = join_paths(prefixdir, get_option('includedir'))
 datadir = join_paths(prefixdir, get_option('datadir'))
 localstatedir = join_paths('/', get_option('localstatedir'))
 
-ogslibdir = join_paths(libdir, 'open5gs')
+pkglibdir = get_option('pkglibdir') == '' ? join_paths(libdir, meson.project_name()) : get_option('pkglibdir')
+pkgincludedir = get_option('pkgincludedir') == '' ?  join_paths(includedir, meson.project_name()) : get_option('pkgincludedir')
+pkgconfiglibdir = get_option('pkgconfiglibdir') == '' ?  join_paths(libdir, 'pkgconfig') : get_option('pkgconfiglibdir')
 
 pkgconfig = import('pkgconfig')
 cc = meson.get_compiler('c')
